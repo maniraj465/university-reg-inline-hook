@@ -13,6 +13,12 @@ app.get('/users', async (req, res) => {
     res.send(user);
 });
 
+app.get('/', async (req, res) => {
+    const user = {
+        name: "maniraj"
+    };
+    res.send(user);
+});
 async function getUserAWS(targetUrl) {
     const response = await axios.get(targetUrl)
     .then(res => {
