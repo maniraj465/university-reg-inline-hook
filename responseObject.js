@@ -12,16 +12,14 @@ exports.regInlineHookCommandsMapping = async response => {
 
 async function userProfileMapping(response) {
   return {
-    uid: response.TID.S,
-    firstName: response.First_Name.S,
-    lastName: response.Last_Name.S,
-    email: response.Email.S,
-    mobilePhone: response.Mobile.S,
-    position: response.Position.S,
-    specialization: response.Specialization.S,
-    experience: response.Experience.S,
-    latestDegree: response.LatestDergee.S,
-    RegistrationStatus: 'Success'
+    firstName: response.firstName.S,
+    lastName: response.lastName.S,
+    email: response.email.S,
+    mobilePhone: response.mobile.S,
+    position: response.position.S,
+    specialization: response.specialization.S,
+    experience: response.experience.S,
+    latestDegree: response.latestDergee.S,
   } 
 }
 

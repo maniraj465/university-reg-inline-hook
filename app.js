@@ -2,16 +2,15 @@ const express = require('express');
 const axios = require('axios');
 const { regInlineHookCommandsMapping, regInlineHookErrorMapping } = require('./responseObject');
 
-const API_GATE_WAY_URL = 'https://0vv671dgs9.execute-api.us-east-1.amazonaws.com/test?TID=';
+const API_GATE_WAY_URL = 'https://cg3q7axbka.execute-api.us-east-1.amazonaws.com/stg?email=';
 
 const app = express();
 app.use(express.json());
 
 app.post('/register', async (req, res) => {
     const payload = req.body.data.userProfile;
-    const id = payload.id;
     const registrationEmail = payload.email;
-    const dynamoDBTargetUrl = API_GATE_WAY_URL + id;
+    const dynamoDBTargetUrl = API_GATE_WAY_URL + registrationEmail;
     const userProfile = await getUserAWS(dynamoDBTargetUrl, registrationEmail);
     res.send(userProfile);
 });
@@ -34,7 +33,7 @@ async function getUserAWS(targetUrl, registrationEmail) {
                 };
                 return regInlineHookErrorMapping(exception);
             } else {
-                const usiversityEmail = res.data.Items[0].Email.S;
+                const usiversityEmail = res.data.Items[0].email.S;
                 if(registrationEmail !== usiversityEmail) {
                     const exception = {
                         statusCode: 400,
@@ -58,5 +57,5 @@ async function getUserAWS(targetUrl, registrationEmail) {
     return response;
 }
 
-const port = process.env.PORT || '5000';
+const port = process.env.PORT || '6000';
 app.listen(port, () => console.log(`Server started on Port ${port}`));
