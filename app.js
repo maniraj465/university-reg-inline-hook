@@ -9,6 +9,7 @@ app.use(express.json());
 
 app.post('/register', async (req, res) => {
     const payload = req.body.data.userProfile;
+    console.log(payload);
     const registrationEmail = payload.email;
     const dynamoDBTargetUrl = API_GATE_WAY_URL + registrationEmail;
     const userProfile = await getUserAWS(dynamoDBTargetUrl, registrationEmail);
@@ -26,7 +27,8 @@ async function getUserAWS(targetUrl, registrationEmail) {
     const response = await axios.get(targetUrl)
     .then(res => {
         if(res && res.status && res.status === 200) {
-            if(res && res.data && res.data.count === 0) {
+            if(res && res.data && res.data.Count && res.data.Count === 0) {
+                console.log('here 1');
                 const exception = {
                     statusCode: 404,
                     message: 'User not found with this email!'
@@ -44,6 +46,7 @@ async function getUserAWS(targetUrl, registrationEmail) {
                 return regInlineHookCommandsMapping(res.data.Items[0]);
             }
         } else {
+            console.log('here 2');
             const exception = {
                 statusCode: 500,
                 message: 'Server unavailable, Please try again!'
@@ -52,7 +55,11 @@ async function getUserAWS(targetUrl, registrationEmail) {
         }
     })
     .catch(error => {
-        return error;
+        const exception = {
+            statusCode: 500,
+            message: 'Server unavailable, Please try again!'
+        };
+        return regInlineHookErrorMapping(exception);
     });
     return response;
 }
